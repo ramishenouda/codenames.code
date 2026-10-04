@@ -1,0 +1,33 @@
+const packs = {
+  red: import.meta.glob('./assets/redpictures/*.png', { eager: true, import: 'default' }),
+  blue: import.meta.glob('./assets/bluepictures/*.png', { eager: true, import: 'default' }),
+  neutral: import.meta.glob('./assets/whitepictures/*.png', { eager: true, import: 'default' }),
+};
+
+function byNumber(map) {
+  return Object.entries(map)
+    .sort(([a], [b]) => {
+      const na = Number(a.match(/(\d+)\.png$/)?.[1] ?? 0);
+      const nb = Number(b.match(/(\d+)\.png$/)?.[1] ?? 0);
+      return na - nb;
+    })
+    .map(([, url]) => url);
+}
+
+export const paintings = {
+  red: byNumber(packs.red),
+  blue: byNumber(packs.blue),
+  neutral: byNumber(packs.neutral),
+};
+
+export function hiddenPainting(index) {
+  const shifted = index < 20 ? (index * 3) % 20 : (index * 3 + 7) % 20;
+  return paintingUrl('neutral', shifted);
+}
+
+export function paintingUrl(color, index = 0) {
+  const pack = color === 'assassin' ? paintings.neutral : paintings[color];
+  if (!pack?.length) return null;
+  const safe = Number.isInteger(index) ? index : 0;
+  return pack[((safe % pack.length) + pack.length) % pack.length];
+}
