@@ -30,7 +30,7 @@ export default function ChatPanel({ messages, onSend, className = '' }) {
           placeholder="Message the room"
           onChange={(event) => setText(event.target.value)}
         />
-        <button type="submit" className="back">Send</button>
+        <button type="submit">Send</button>
       </form>
     </section>
   );

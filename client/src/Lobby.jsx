@@ -88,18 +88,17 @@ export default function Lobby({ room, error, onSit, onRandomize, onStart, onChat
   return (
     <main className="desk lobby-desk">
       <Frame className="lobby-card">
-        <h2>Lobby</h2>
-        <div className="rule" aria-hidden="true"><span /></div>
-        {error && <p className="banner" role="alert">{error}</p>}
-        <div className="code-row">
-          <p className="code-plaque">
-            <span>Room code</span>
+        <div className="lobby-head">
+          <div>
+            <h2>Lobby</h2>
+            <p className="lede">Pick a seat. The host deals when both teams are ready.</p>
+          </div>
+          <button type="button" className="code-plaque" onClick={copyCode}>
+            <span>{copied ? 'Copied' : 'Room code'}</span>
             <strong>{room.code}</strong>
-          </p>
-          <button type="button" className="back copy-btn" onClick={copyCode}>
-            {copied ? 'Copied' : 'Copy'}
           </button>
         </div>
+        {error && <p className="banner" role="alert">{error}</p>}
         <div className="teams">
           <TeamColumn team="red" room={room} onSit={onSit} />
           <TeamColumn team="blue" room={room} onSit={onSit} />
@@ -112,7 +111,7 @@ export default function Lobby({ room, error, onSit, onRandomize, onStart, onChat
         <div className="lobby-actions">
           {host ? (
             <>
-              <button type="button" className="back" disabled={!room.actions.randomize} onClick={onRandomize}>
+              <button type="button" disabled={!room.actions.randomize} onClick={onRandomize}>
                 Randomize
               </button>
               <button type="button" className="primary" disabled={!room.actions.start} onClick={onStart}>
@@ -126,7 +125,7 @@ export default function Lobby({ room, error, onSit, onRandomize, onStart, onChat
         {host && !room.actions.start && <p className="hint">{room.startHint}</p>}
         <ChatPanel messages={room.chat} onSend={onChat} />
         <div className="leave-row">
-          <button type="button" className="back" onClick={onLeave}>Leave lobby</button>
+          <button type="button" className="quiet-btn" onClick={onLeave}>Leave lobby</button>
         </div>
       </Frame>
     </main>

@@ -2,6 +2,7 @@ const packs = {
   red: import.meta.glob('./assets/redpictures/*.png', { eager: true, import: 'default' }),
   blue: import.meta.glob('./assets/bluepictures/*.png', { eager: true, import: 'default' }),
   neutral: import.meta.glob('./assets/whitepictures/*.png', { eager: true, import: 'default' }),
+  assassin: import.meta.glob('./assets/blackpictures/*.png', { eager: true, import: 'default' }),
 };
 
 function byNumber(map) {
@@ -18,6 +19,7 @@ export const paintings = {
   red: byNumber(packs.red),
   blue: byNumber(packs.blue),
   neutral: byNumber(packs.neutral),
+  assassin: byNumber(packs.assassin),
 };
 
 export function hiddenPainting(index) {
@@ -26,7 +28,9 @@ export function hiddenPainting(index) {
 }
 
 export function paintingUrl(color, index = 0) {
-  const pack = color === 'assassin' ? paintings.neutral : paintings[color];
+  const pack = color === 'assassin' && !paintings.assassin.length
+    ? paintings.neutral
+    : paintings[color];
   if (!pack?.length) return null;
   const safe = Number.isInteger(index) ? index : 0;
   return pack[((safe % pack.length) + pack.length) % pack.length];

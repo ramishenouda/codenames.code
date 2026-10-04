@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { hiddenPainting, paintingUrl } from './art.js';
 import ChatPanel from './ChatPanel.jsx';
-import Frame from './Frame.jsx';
+import Frame, { Brand } from './Frame.jsx';
 
 const TAGS = {
   red: 'red agent',
@@ -10,10 +10,44 @@ const TAGS = {
   assassin: 'assassin',
 };
 
-function cardClass(card) {
-  if (!card.color) return 'card';
-  if (card.revealed) return `card revealed revealed-${card.color}`;
-  return `card key key-${card.color}`;
+function CardButton({ card, index, spy, gameover, canGuess, onGuess }) {
+  const hidden = hiddenPainting(index);
+  const known = card.color ? paintingUrl(card.color, card.art) : hidden;
+  const open = card.revealed || (gameover && card.color && !spy);
+  const frontUrl = spy && card.color ? known : hidden;
+  const label = card.color ? `${card.word} ${TAGS[card.color]}` : card.word;
+
+  return (
+    <button
+      type="button"
+      className={`card${open ? ' open' : ''}${canGuess && !card.revealed ? ' live' : ''}`}
+      style={{
+        '--i': index,
+        '--flip-delay': gameover && !card.revealed ? `${index * 32}ms` : '0ms',
+      }}
+      aria-label={label}
+      onClick={() => {
+        if (canGuess && !card.revealed) onGuess(index);
+      }}
+    >
+      <span className="card-inner">
+        <span className={`card-side front${spy && card.color ? ` tone-${card.color}` : ''}`}>
+          <span className="card-face" style={{ '--card-art': `url(${frontUrl})` }} />
+          <span className="card-caption">
+            <span className="card-word">{card.word}</span>
+            {spy && card.color && <span className="card-tag">{TAGS[card.color]}</span>}
+          </span>
+        </span>
+        <span className={`card-side back${card.color ? ` tone-${card.color}` : ''}`}>
+          <span className="card-face" style={{ '--card-art': `url(${known})` }} />
+          <span className="card-caption">
+            <span className="card-word">{card.word}</span>
+            {card.color && <span className="card-tag">{TAGS[card.color]}</span>}
+          </span>
+        </span>
+      </span>
+    </button>
+  );
 }
 
 function Rail({ team, room }) {
@@ -25,7 +59,7 @@ function Rail({ team, room }) {
     <section className={`rail ${team}${active ? ' active' : ''}`}>
       <header>
         <h2>{label}</h2>
-        <strong className="badge">{room.counts[team].left}</strong>
+        <strong key={room.counts[team].left} className="badge">{room.counts[team].left}</strong>
       </header>
       <p>{room.counts[team].left} left of {room.counts[team].total}</p>
       <ul>
@@ -65,6 +99,13 @@ export default function Board({
     ? `${room.clue.word} ${room.clue.count === 'unlimited' ? '∞' : room.clue.count}`
     : '';
   const yours = room.yourTeam === room.turn;
+  const spy = room.yourRole === 'spymaster';
+  const [flipReady, setFlipReady] = useState(false);
+
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setFlipReady(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   function submitClue(event) {
     event.preventDefault();
@@ -94,53 +135,46 @@ export default function Board({
       {error && <p className="banner desk-banner" role="alert">{error}</p>}
       <div className="board-layout">
         <aside className="rails">
+          <Brand />
           <Rail team="red" room={room} />
           <Rail team="blue" room={room} />
         </aside>
-        <Frame className="mat">
+        <Frame className="mat" brand={false}>
           {room.clue && room.phase !== 'gameover' && (
-            <p className="clue-line">
+            <p key={clueLabel} className="clue-line">
               <span>Clue</span>
               {clueLabel}
             </p>
           )}
-          <div className="grid">
-            {room.board.map((card, index) => {
-              const url = card.color
-                ? paintingUrl(card.color, card.art)
-                : hiddenPainting(index);
-              return (
-                <button
-                  key={`${card.word}-${index}`}
-                  type="button"
-                  className={`${cardClass(card)} has-art${room.actions.guess && !card.revealed ? ' live' : ''}`}
-                  style={{ '--card-art': `url(${url})` }}
-                  onClick={() => {
-                    if (room.actions.guess && !card.revealed) onGuess(index);
-                  }}
-                >
-                  <span className="card-face" />
-                  <span className="card-caption">
-                    <span className="card-word">{card.word}</span>
-                    {card.color && <span className="card-tag">{TAGS[card.color]}</span>}
-                  </span>
-                </button>
-              );
-            })}
+          <div className={`grid${flipReady ? ' flip-ready' : ''}`}>
+            {room.board.map((card, index) => (
+              <CardButton
+                key={`${card.word}-${index}`}
+                card={card}
+                index={index}
+                spy={spy}
+                gameover={room.phase === 'gameover'}
+                canGuess={room.actions.guess}
+                onGuess={onGuess}
+              />
+            ))}
           </div>
         </Frame>
         <aside className="action-rail">
-          <section className={`slip turn-slip ${room.phase === 'gameover' ? room.winner : room.turn}`}>
+          <section
+            key={`${room.turn}-${room.phase}`}
+            className={`slip turn-slip ${room.phase === 'gameover' ? room.winner : room.turn}`}
+          >
             <p className="turn-kicker">{turnTitle}</p>
             <p className="status">{status}</p>
-            {clueLabel && room.phase !== 'gameover' && <p className="clue-chip">{clueLabel}</p>}
+            {clueLabel && room.phase !== 'gameover' && <p key={clueLabel} className="clue-chip">{clueLabel}</p>}
             <p className="code-chip">Room {room.code}</p>
           </section>
           {room.actions.clue && (
             <form className="slip clue-form" onSubmit={submitClue}>
               <h2>Give a clue</h2>
-              <label>
-                <span>One word</span>
+              <label className="field">
+                <span className="field-label">One word</span>
                 <input
                   value={word}
                   maxLength={24}
@@ -174,7 +208,7 @@ export default function Board({
           {(room.actions.guess || (room.actions.endTurn && !room.actions.guess)) && (
             <div className="slip guess-row">
               {room.actions.guess && <p>Touch a card. Stop when the clue runs out.</p>}
-              <button type="button" className="back" onClick={onEndTurn}>End turn</button>
+              <button type="button" onClick={onEndTurn}>End turn</button>
             </div>
           )}
           {room.phase === 'gameover' && (
@@ -194,7 +228,7 @@ export default function Board({
             </ol>
           </section>
           <ChatPanel className="slip" messages={room.chat} onSend={onChat} />
-          <button type="button" className="back leave-btn" onClick={onLeave}>Leave</button>
+          <button type="button" className="quiet-btn leave-btn" onClick={onLeave}>Leave game</button>
         </aside>
       </div>
     </main>

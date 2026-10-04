@@ -1,13 +1,23 @@
-export default function Frame({ className = '', children }) {
+export default function Frame({ className = '', brand = true, children }) {
   return (
-    <section className={`parchment ${className}`.trim()}>
-      <h1 className="plaque">Codenames</h1>
-      <span className="corner nw" aria-hidden="true" />
-      <span className="corner ne" aria-hidden="true" />
-      <span className="corner sw" aria-hidden="true" />
-      <span className="corner se" aria-hidden="true" />
+    <section className={`panel ${className}`.trim()}>
+      {brand && <Brand />}
       {children}
     </section>
+  );
+}
+
+export function Brand() {
+  return (
+    <h1 className="brand">
+      <span className="brand-mark" aria-hidden="true">
+        <i />
+        <i />
+        <i />
+        <i />
+      </span>
+      Codenames
+    </h1>
   );
 }
 

@@ -1,6 +1,13 @@
 import { useState } from 'react';
+import { paintingUrl } from './art.js';
 import Frame, { Glyph } from './Frame.jsx';
 import { loadName } from './socket.js';
+
+const HERO = [
+  ['red', 0],
+  ['neutral', 7],
+  ['blue', 0],
+];
 
 export default function Home({ online, error, initialCode, onCreate, onJoin }) {
   const [name, setName] = useState(loadName);
@@ -9,12 +16,21 @@ export default function Home({ online, error, initialCode, onCreate, onJoin }) {
   return (
     <main className="desk">
       <Frame className="home-card">
-        <h2>Create a room</h2>
-        <div className="rule" aria-hidden="true"><span /></div>
+        <div className="hero" aria-hidden="true">
+          {HERO.map(([color, index]) => (
+            <span
+              key={color}
+              className={`hero-card ${color}`}
+              style={{ backgroundImage: `url(${paintingUrl(color, index)})` }}
+            />
+          ))}
+        </div>
+        <h2>Start a game</h2>
+        <p className="lede">Create a room, or join one with a code.</p>
         {!online && <p className="banner">Connecting to the table…</p>}
         {error && <p className="banner" role="alert">{error}</p>}
         <label className="field">
-          <span>Your name</span>
+          <span className="field-label">Your name</span>
           <span className="inset">
             <Glyph>
               <circle cx="12" cy="8" r="3.2" fill="currentColor" />
@@ -29,8 +45,11 @@ export default function Home({ online, error, initialCode, onCreate, onJoin }) {
             />
           </span>
         </label>
-        <label className="field">
-          <span>Room code</span>
+        <button type="button" className="primary wide" onClick={() => onCreate(name)} disabled={!online}>
+          Create a room
+        </button>
+        <div className="divider"><span>or join a room</span></div>
+        <div className="join-row">
           <span className="inset">
             <Glyph>
               <circle cx="8" cy="12" r="3.1" fill="none" stroke="currentColor" strokeWidth="1.8" />
@@ -41,22 +60,17 @@ export default function Home({ online, error, initialCode, onCreate, onJoin }) {
               value={code}
               maxLength={4}
               spellCheck={false}
-              placeholder="A7K9"
+              aria-label="Room code"
+              placeholder="Room code"
               onChange={(event) => setCode(event.target.value.toUpperCase())}
             />
           </span>
-        </label>
-        <div className="home-actions">
-          <button type="button" className="primary" onClick={() => onCreate(name)} disabled={!online}>
-            Create a room
-          </button>
           <button
             type="button"
-            className="back"
             onClick={() => onJoin(name, code)}
             disabled={!online || code.length < 4}
           >
-            Join with code
+            Join
           </button>
         </div>
       </Frame>
