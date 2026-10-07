@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Allow: /stats
+Disallow: /api/
+Disallow: /*?*room=
+
+User-agent: GPTBot
+Allow: /
+Allow: /stats
+Disallow: /api/
+Disallow: /*?*room=
+
+User-agent: Google-Extended
+Allow: /
+Allow: /stats
+Disallow: /api/
+Disallow: /*?*room=
+
+Sitemap: /sitemap.xml

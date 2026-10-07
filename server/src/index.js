@@ -144,6 +144,7 @@ export function register(io) {
 }
 
 function requestOrigin(req) {
+  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
   const proto = req.headers['x-forwarded-proto'] || 'http';
   return `${proto}://${host}`;
@@ -180,7 +181,21 @@ export function start(port = 3001) {
           'User-agent: *',
           'Allow: /',
           'Allow: /stats',
+          'Disallow: /api/',
           'Disallow: /*?*room=',
+          '',
+          'User-agent: GPTBot',
+          'Allow: /',
+          'Allow: /stats',
+          'Disallow: /api/',
+          'Disallow: /*?*room=',
+          '',
+          'User-agent: Google-Extended',
+          'Allow: /',
+          'Allow: /stats',
+          'Disallow: /api/',
+          'Disallow: /*?*room=',
+          '',
           `Sitemap: ${origin}/sitemap.xml`,
           '',
         ].join('\n'),
@@ -189,6 +204,7 @@ export function start(port = 3001) {
     }
     if (req.method === 'GET' && url === '/sitemap.xml') {
       const origin = requestOrigin(req);
+      const now = new Date().toISOString();
       sendText(
         res,
         200,
@@ -196,8 +212,18 @@ export function start(port = 3001) {
         [
           '<?xml version="1.0" encoding="UTF-8"?>',
           '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
-          `  <url><loc>${origin}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
-          `  <url><loc>${origin}/stats</loc><changefreq>hourly</changefreq><priority>0.4</priority></url>`,
+          '  <url>',
+          `    <loc>${origin}/</loc>`,
+          `    <lastmod>${now}</lastmod>`,
+          '    <changefreq>weekly</changefreq>',
+          '    <priority>1.0</priority>',
+          '  </url>',
+          '  <url>',
+          `    <loc>${origin}/stats</loc>`,
+          `    <lastmod>${now}</lastmod>`,
+          '    <changefreq>hourly</changefreq>',
+          '    <priority>0.4</priority>',
+          '  </url>',
           '</urlset>',
           '',
         ].join('\n'),

@@ -4,14 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d0e12" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="application-name" content="Codenames" />
+    <meta name="format-detection" content="telephone=no" />
     <title>Codenames — play online with friends</title>
     <meta
       name="description"
       content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
     />
-    <meta name="robots" content="index,follow" />
+    <meta
+      name="robots"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
+    <meta
+      name="googlebot"
+      content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1"
+    />
     <link rel="canonical" href="/" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" type="image/png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
     <meta property="og:site_name" content="Codenames" />
     <meta property="og:title" content="Codenames — play online with friends" />
     <meta
@@ -19,25 +35,66 @@
       content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
     />
     <meta property="og:url" content="/" />
-    <meta name="twitter:card" content="summary" />
+    <meta property="og:image" content="/og.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Codenames online word game" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Codenames — play online with friends" />
     <meta
       name="twitter:description"
       content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
     />
+    <meta name="twitter:image" content="/og.png" />
+    <meta name="twitter:image:alt" content="Codenames online word game" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Codenames",
-        "applicationCategory": "GameApplication",
-        "operatingSystem": "Any",
-        "description": "Free online Codenames. Create a room, share the code, and play with friends in real time.",
-        "offers": {
-          "@type": "Offer",
-          "price": "0",
-          "priceCurrency": "USD"
-        }
+        "@graph": [
+          {
+            "@type": "WebSite",
+            "name": "Codenames",
+            "url": "/",
+            "description": "Free online Codenames. Create a room, share the code, and play with friends in real time.",
+            "inLanguage": "en"
+          },
+          {
+            "@type": "WebApplication",
+            "name": "Codenames",
+            "url": "/",
+            "applicationCategory": "GameApplication",
+            "operatingSystem": "Any",
+            "browserRequirements": "Requires JavaScript",
+            "description": "Free online Codenames. Create a room, share the code, and play with friends in real time.",
+            "offers": {
+              "@type": "Offer",
+              "price": "0",
+              "priceCurrency": "USD"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": "How do I play Codenames online?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "Create a room, share the four-letter code with friends, sit as a spymaster or operative, and start the game when both teams are ready."
+                }
+              },
+              {
+                "@type": "Question",
+                "name": "Do I need an account?",
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": "No account is required. Enter a display name, create or join a room, and play in the browser."
+                }
+              }
+            ]
+          }
+        ]
       }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -56,6 +113,11 @@
           Free online Codenames. Create a room, share the code, and play the classic
           word game with spymasters and operatives in real time. JavaScript is required
           to join a table.
+        </p>
+        <h2>How to play</h2>
+        <p>
+          One spymaster per team gives one-word clues. Operatives guess the matching
+          agents on the grid. Avoid bystanders and the assassin.
         </p>
         <p><a href="/stats">Server statistics</a></p>
       </main>

@@ -1,8 +1,21 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { seoFilesPlugin } from './vite.seo.js';
+
+const root = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react(), seoFilesPlugin()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(root, 'index.html'),
+        stats: resolve(root, 'stats.html'),
+      },
+    },
+  },
   server: {
     port: 5173,
     proxy: {
@@ -11,12 +24,6 @@ export default defineConfig({
         ws: true,
       },
       '/api': {
-        target: 'http://127.0.0.1:3010',
-      },
-      '/robots.txt': {
-        target: 'http://127.0.0.1:3010',
-      },
-      '/sitemap.xml': {
         target: 'http://127.0.0.1:3010',
       },
     },

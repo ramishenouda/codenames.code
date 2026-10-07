@@ -2,14 +2,14 @@ const HOME = {
   title: 'Codenames — play online with friends',
   description:
     'Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time.',
-  robots: 'index,follow',
+  robots: 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
 };
 
 const STATS = {
   title: 'Codenames · Stats',
   description:
     'Live and lifetime statistics for this Codenames server: open rooms, players online, games finished, and who won.',
-  robots: 'index,follow',
+  robots: 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
 };
 
 const ROOM = {
@@ -39,16 +39,26 @@ function upsertCanonical(href) {
   node.setAttribute('href', href);
 }
 
+function absolute(path) {
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`;
+}
+
 export function applySeo({ title, description, robots, path = '/' }) {
-  const url = `${window.location.origin}${path}`;
+  const url = absolute(path);
+  const image = absolute('/og.png');
   document.title = title;
   upsertMeta('name', 'description', description);
   upsertMeta('name', 'robots', robots);
+  upsertMeta('name', 'googlebot', robots);
   upsertMeta('property', 'og:title', title);
   upsertMeta('property', 'og:description', description);
   upsertMeta('property', 'og:url', url);
+  upsertMeta('property', 'og:image', image);
+  upsertMeta('property', 'og:image:alt', 'Codenames online word game');
   upsertMeta('name', 'twitter:title', title);
   upsertMeta('name', 'twitter:description', description);
+  upsertMeta('name', 'twitter:image', image);
   upsertCanonical(url);
 }
 

@@ -26,7 +26,9 @@ export default function Home({ online, error, initialCode, onCreate, onJoin }) {
           ))}
         </div>
         <h2>Start a game</h2>
-        <p className="lede">Create a room, or join one with a code.</p>
+        <p className="lede">
+          Free online Codenames — create a room, or join one with a code, and play in real time.
+        </p>
         {!online && <p className="banner">Connecting to the table…</p>}
         {error && <p className="banner" role="alert">{error}</p>}
         <label className="field">
@@ -73,6 +75,15 @@ export default function Home({ online, error, initialCode, onCreate, onJoin }) {
             Join
           </button>
         </div>
+        <a className="quiet-link stats-link" href="/stats">Statistics</a>
+        <section className="seo-copy">
+          <h2>How online Codenames works</h2>
+          <p>
+            Sit as a spymaster or operative. Spymasters give one-word clues;
+            operatives flip cards to find their agents. Bystanders end the turn.
+            The assassin ends the game.
+          </p>
+        </section>
       </Frame>
     </main>
   );
