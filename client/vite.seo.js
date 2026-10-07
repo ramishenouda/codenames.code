@@ -1,14 +1,9 @@
 import { writeFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 
-function originFromReq(req) {
-  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
-  const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:5173';
-  const proto = req.headers['x-forwarded-proto'] || 'http';
-  return `${proto}://${host}`;
-}
+export const SITE_URL = (process.env.SITE_URL || 'https://codenames.codes').replace(/\/$/, '');
 
-export function robotsBody(origin) {
+export function robotsBody(origin = SITE_URL) {
   return [
     'User-agent: *',
     'Allow: /',
@@ -33,7 +28,7 @@ export function robotsBody(origin) {
   ].join('\n');
 }
 
-export function sitemapBody(origin) {
+export function sitemapBody(origin = SITE_URL) {
   const now = new Date().toISOString();
   return [
     '<?xml version="1.0" encoding="UTF-8"?>',
@@ -55,7 +50,7 @@ export function sitemapBody(origin) {
   ].join('\n');
 }
 
-/** Serves host-aware robots.txt and sitemap.xml in Vite, and writes absolute copies on build. */
+/** Serves robots.txt and sitemap.xml, and writes absolute copies on build. */
 export function seoFilesPlugin() {
   return {
     name: 'seo-files',
@@ -68,29 +63,26 @@ export function seoFilesPlugin() {
         }
         if (req.method !== 'GET' && req.method !== 'HEAD') return next();
         if (path === '/robots.txt') {
-          const body = robotsBody(originFromReq(req));
           res.statusCode = 200;
           res.setHeader('Content-Type', 'text/plain; charset=utf-8');
           res.setHeader('Cache-Control', 'public, max-age=300');
-          res.end(body);
+          res.end(robotsBody());
           return;
         }
         if (path === '/sitemap.xml') {
-          const body = sitemapBody(originFromReq(req));
           res.statusCode = 200;
           res.setHeader('Content-Type', 'application/xml; charset=utf-8');
           res.setHeader('Cache-Control', 'public, max-age=300');
-          res.end(body);
+          res.end(sitemapBody());
           return;
         }
         next();
       });
     },
     closeBundle() {
-      const origin = (process.env.SITE_URL || 'http://localhost:5173').replace(/\/$/, '');
       const outDir = resolve(process.cwd(), 'dist');
-      writeFileSync(resolve(outDir, 'robots.txt'), robotsBody(origin));
-      writeFileSync(resolve(outDir, 'sitemap.xml'), sitemapBody(origin));
+      writeFileSync(resolve(outDir, 'robots.txt'), robotsBody());
+      writeFileSync(resolve(outDir, 'sitemap.xml'), sitemapBody());
     },
   };
 }

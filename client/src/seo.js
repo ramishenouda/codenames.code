@@ -1,3 +1,5 @@
+import { SITE_URL } from './site.js';
+
 const HOME = {
   title: 'Codenames — play online with friends',
   description:
@@ -41,7 +43,7 @@ function upsertCanonical(href) {
 
 function absolute(path) {
   if (/^https?:\/\//i.test(path)) return path;
-  return `${window.location.origin}${path.startsWith('/') ? path : `/${path}`}`;
+  return `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 }
 
 export function applySeo({ title, description, robots, path = '/' }) {

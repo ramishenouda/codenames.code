@@ -16,4 +16,4 @@ Allow: /stats
 Disallow: /api/
 Disallow: /*?*room=
 
-Sitemap: /sitemap.xml
+Sitemap: https://codenames.codes/sitemap.xml

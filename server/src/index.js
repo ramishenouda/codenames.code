@@ -143,11 +143,8 @@ export function register(io) {
   });
 }
 
-function requestOrigin(req) {
-  if (process.env.SITE_URL) return process.env.SITE_URL.replace(/\/$/, '');
-  const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
-  const proto = req.headers['x-forwarded-proto'] || 'http';
-  return `${proto}://${host}`;
+function requestOrigin() {
+  return (process.env.SITE_URL || 'https://codenames.codes').replace(/\/$/, '');
 }
 
 function sendText(res, status, type, body) {
@@ -172,7 +169,7 @@ export function start(port = 3001) {
       return;
     }
     if (req.method === 'GET' && url === '/robots.txt') {
-      const origin = requestOrigin(req);
+      const origin = requestOrigin();
       sendText(
         res,
         200,
@@ -203,7 +200,7 @@ export function start(port = 3001) {
       return;
     }
     if (req.method === 'GET' && url === '/sitemap.xml') {
-      const origin = requestOrigin(req);
+      const origin = requestOrigin();
       const now = new Date().toISOString();
       sendText(
         res,
