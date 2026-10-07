@@ -10,6 +10,15 @@ export default defineConfig({
         target: 'http://127.0.0.1:3010',
         ws: true,
       },
+      '/api': {
+        target: 'http://127.0.0.1:3010',
+      },
+      '/robots.txt': {
+        target: 'http://127.0.0.1:3010',
+      },
+      '/sitemap.xml': {
+        target: 'http://127.0.0.1:3010',
+      },
     },
   },
 });

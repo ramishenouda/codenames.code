@@ -600,6 +600,65 @@ input::placeholder { color: var(--faint); }
 .chat button { padding: 0.6rem 0.9rem; }
 .leave-btn { align-self: stretch; }
 
+.quiet-link {
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.quiet-link:hover { color: var(--text); }
+.stats-link { display: block; margin-top: 1.2rem; text-align: center; }
+
+.stats-card { width: min(46rem, 100%); }
+.stats-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+}
+.stats-card h3 {
+  margin: 1.3rem 0 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+.stat-tile {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.9rem 0.85rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.stat-tile strong {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+.stat-tile span { color: var(--muted); font-size: 0.82rem; }
+.stat-tile.red strong { color: var(--red-text); }
+.stat-tile.blue strong { color: var(--blue-text); }
+
+.win-bar {
+  display: flex;
+  height: 0.55rem;
+  margin-bottom: 0.7rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.win-bar .red { background: var(--red); }
+.win-bar .blue { background: var(--blue); }
+.stat-grid.wins { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+
 .dot {
   display: inline-block;
   width: 0.5rem;
@@ -616,7 +675,8 @@ input::placeholder { color: var(--faint); }
   .rails, .action-rail { overflow: visible; }
   .grid { grid-template-rows: none; }
   .card { aspect-ratio: 0.82; height: auto; }
-  .lobby-head { flex-direction: column; }
+  .lobby-head, .stats-head { flex-direction: column; }
+  .stat-grid, .stat-grid.wins { grid-template-columns: 1fr 1fr; }
   .code-plaque { justify-items: start; text-align: left; }
 }
 

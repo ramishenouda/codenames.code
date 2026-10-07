@@ -2,6 +2,8 @@ import { useCallback, useEffect, useState } from 'react';
 import Board from './Board.jsx';
 import Home from './Home.jsx';
 import Lobby from './Lobby.jsx';
+import Stats from './Stats.jsx';
+import { seoHome, seoRoom } from './seo.js';
 import {
   clearSession,
   loadSession,
@@ -25,12 +27,19 @@ export default function App() {
     });
   }), []);
 
+  const onStats = window.location.pathname === '/stats';
+
+  useEffect(() => {
+    if (onStats) return;
+    if (room) seoRoom(room.code);
+    else seoHome();
+  }, [onStats, room]);
+
   useEffect(() => {
     const onRoom = (next) => {
       setRoom(next);
       setError('');
       setRoomInUrl(next.code);
-      document.title = `Codenames · ${next.code}`;
     };
     const rejoin = () => {
       const session = loadSession();
@@ -40,7 +49,6 @@ export default function App() {
           clearSession();
           setRoom(null);
           setRoomInUrl('');
-          document.title = 'Codenames';
           setError('That game is no longer open. Start a new one.');
         }
       });
@@ -81,7 +89,10 @@ export default function App() {
     clearSession();
     setRoom(null);
     setRoomInUrl('');
-    document.title = 'Codenames';
+  }
+
+  if (onStats) {
+    return <Stats />;
   }
 
   if (!room) {

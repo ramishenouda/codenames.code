@@ -1,5 +1,6 @@
 import { randomBytes, randomUUID } from 'node:crypto';
 import { createGame, endTurn, giveClue, guessCard } from './game.js';
+import { noteClue, noteFinish, noteGame, noteGuess, noteRoom, resetStats } from './stats.js';
 import { WORDS } from './words.js';
 
 const rooms = new Map();
@@ -82,6 +83,7 @@ export function resetRooms() {
   rooms.clear();
   tokens.clear();
   departureMs = 1500;
+  resetStats();
 }
 
 export function rosterReady(room) {
@@ -182,6 +184,7 @@ export function createRoom(name) {
   };
   rooms.set(code, room);
   tokens.set(player.token, { code, playerId: player.id });
+  noteRoom();
   return { ok: true, code, token: player.token, playerId: player.id };
 }
 
@@ -300,6 +303,7 @@ export function startGame(code, playerId) {
     return { error: 'Each team needs one spymaster and at least one operative.' };
   }
   room.game = createGame(WORDS);
+  noteGame();
   return { ok: true, room };
 }
 
@@ -317,6 +321,7 @@ export function submitClue(code, playerId, word, count) {
   const result = giveClue(room.game, { word, count });
   if (!result.ok) return result;
   room.game = result.game;
+  noteClue();
   return { ok: true, room };
 }
 
@@ -333,6 +338,11 @@ export function submitGuess(code, playerId, index) {
   }
   const result = guessCard(room.game, index);
   if (!result.ok) return result;
+  const revealed = result.game.cards[index];
+  noteGuess(revealed.color);
+  if (result.game.phase === 'gameover') {
+    noteFinish(result.game.winner, revealed.color === 'assassin');
+  }
   room.game = result.game;
   return { ok: true, room };
 }
@@ -361,6 +371,7 @@ export function playAgain(code, playerId) {
   if (room.hostId !== playerId) return { error: 'Only the host can deal again.' };
   if (room.game?.phase !== 'gameover') return { error: 'The round is still going.' };
   room.game = createGame(WORDS);
+  noteGame();
   return { ok: true, room };
 }
 
@@ -403,6 +414,10 @@ export function leaveRoom(code, playerId) {
   if (room.hostId === playerId) room.hostId = room.players[0].id;
   touch(room);
   return { ok: true, room };
+}
+
+export function listRooms() {
+  return [...rooms.values()];
 }
 
 export function roomForSocket(socketId) {

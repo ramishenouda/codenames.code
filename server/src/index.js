@@ -7,6 +7,7 @@ import {
   disconnectSocket,
   joinRoom,
   leaveRoom,
+  listRooms,
   maskRoom,
   playAgain,
   postChat,
@@ -19,6 +20,7 @@ import {
   submitEndTurn,
   submitGuess,
 } from './rooms.js';
+import { publicStats } from './stats.js';
 
 function ackOf(payload, ack) {
   if (typeof payload === 'function') return { payload: {}, ack: payload };
@@ -141,8 +143,70 @@ export function register(io) {
   });
 }
 
+function requestOrigin(req) {
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost';
+  const proto = req.headers['x-forwarded-proto'] || 'http';
+  return `${proto}://${host}`;
+}
+
+function sendText(res, status, type, body) {
+  res.writeHead(status, {
+    'content-type': `${type}; charset=utf-8`,
+    'cache-control': 'public, max-age=300',
+  });
+  res.end(body);
+}
+
 export function start(port = 3001) {
-  const httpServer = createServer();
+  const httpServer = createServer((req, res) => {
+    const url = req.url?.split('?')[0];
+    if (url?.startsWith('/socket.io')) return;
+    if (req.method === 'GET' && url === '/api/stats') {
+      const body = JSON.stringify(publicStats(listRooms()));
+      res.writeHead(200, {
+        'content-type': 'application/json; charset=utf-8',
+        'cache-control': 'no-store',
+      });
+      res.end(body);
+      return;
+    }
+    if (req.method === 'GET' && url === '/robots.txt') {
+      const origin = requestOrigin(req);
+      sendText(
+        res,
+        200,
+        'text/plain',
+        [
+          'User-agent: *',
+          'Allow: /',
+          'Allow: /stats',
+          'Disallow: /*?*room=',
+          `Sitemap: ${origin}/sitemap.xml`,
+          '',
+        ].join('\n'),
+      );
+      return;
+    }
+    if (req.method === 'GET' && url === '/sitemap.xml') {
+      const origin = requestOrigin(req);
+      sendText(
+        res,
+        200,
+        'application/xml',
+        [
+          '<?xml version="1.0" encoding="UTF-8"?>',
+          '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+          `  <url><loc>${origin}/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>`,
+          `  <url><loc>${origin}/stats</loc><changefreq>hourly</changefreq><priority>0.4</priority></url>`,
+          '</urlset>',
+          '',
+        ].join('\n'),
+      );
+      return;
+    }
+    res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8' });
+    res.end('Not found');
+  });
   const io = new Server(httpServer, { cors: { origin: '*' } });
   register(io);
   return new Promise((resolve) => {

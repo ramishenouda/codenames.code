@@ -4,7 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d0e12" />
-    <title>Codenames</title>
+    <title>Codenames — play online with friends</title>
+    <meta
+      name="description"
+      content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
+    />
+    <meta name="robots" content="index,follow" />
+    <link rel="canonical" href="/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Codenames" />
+    <meta property="og:title" content="Codenames — play online with friends" />
+    <meta
+      property="og:description"
+      content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
+    />
+    <meta property="og:url" content="/" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Codenames — play online with friends" />
+    <meta
+      name="twitter:description"
+      content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Codenames",
+        "applicationCategory": "GameApplication",
+        "operatingSystem": "Any",
+        "description": "Free online Codenames. Create a room, share the code, and play with friends in real time.",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        }
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,6 +49,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <main>
+        <h1>Codenames</h1>
+        <p>
+          Free online Codenames. Create a room, share the code, and play the classic
+          word game with spymasters and operatives in real time. JavaScript is required
+          to join a table.
+        </p>
+        <p><a href="/stats">Server statistics</a></p>
+      </main>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
