@@ -1,15 +1,15 @@
 const packs = {
-  red: import.meta.glob('./assets/redpictures/*.png', { eager: true, import: 'default' }),
-  blue: import.meta.glob('./assets/bluepictures/*.png', { eager: true, import: 'default' }),
-  neutral: import.meta.glob('./assets/whitepictures/*.png', { eager: true, import: 'default' }),
-  assassin: import.meta.glob('./assets/blackpictures/*.png', { eager: true, import: 'default' }),
+  red: import.meta.glob('./art/red/*.webp', { eager: true, import: 'default' }),
+  blue: import.meta.glob('./art/blue/*.webp', { eager: true, import: 'default' }),
+  neutral: import.meta.glob('./art/white/*.webp', { eager: true, import: 'default' }),
+  assassin: import.meta.glob('./art/black/*.webp', { eager: true, import: 'default' }),
 };
 
 function byNumber(map) {
   return Object.entries(map)
     .sort(([a], [b]) => {
-      const na = Number(a.match(/(\d+)\.png$/)?.[1] ?? 0);
-      const nb = Number(b.match(/(\d+)\.png$/)?.[1] ?? 0);
+      const na = Number(a.match(/(\d+)\.webp$/)?.[1] ?? 0);
+      const nb = Number(b.match(/(\d+)\.webp$/)?.[1] ?? 0);
       return na - nb;
     })
     .map(([, url]) => url);

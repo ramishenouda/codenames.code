@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0d0e12" />
     <meta name="color-scheme" content="dark" />
-    <meta name="application-name" content="Codenames" />
+    <meta name="application-name" content="Codenames.codes" />
     <meta name="format-detection" content="telephone=no" />
-    <title>Codenames — play online with friends</title>
+    <title>Codenames.codes — Play Codenames online free with friends</title>
     <meta
       name="description"
       content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
@@ -28,8 +28,8 @@
     <link rel="sitemap" type="application/xml" title="Sitemap" href="https://codenames.codes/sitemap.xml" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="en_US" />
-    <meta property="og:site_name" content="Codenames" />
-    <meta property="og:title" content="Codenames — play online with friends" />
+    <meta property="og:site_name" content="Codenames.codes" />
+    <meta property="og:title" content="Codenames.codes — Play Codenames online free with friends" />
     <meta
       property="og:description"
       content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
@@ -41,7 +41,7 @@
     <meta property="og:image:height" content="630" />
     <meta property="og:image:alt" content="Codenames online word game" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Codenames — play online with friends" />
+    <meta name="twitter:title" content="Codenames.codes — Play Codenames online free with friends" />
     <meta
       name="twitter:description"
       content="Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time."
@@ -54,14 +54,16 @@
         "@graph": [
           {
             "@type": "WebSite",
-            "name": "Codenames",
+            "name": "Codenames.codes",
+            "alternateName": ["Codenames", "codenames.codes", "Codenames online"],
             "url": "https://codenames.codes/",
             "description": "Free online Codenames. Create a room, share the code, and play with friends in real time.",
             "inLanguage": "en"
           },
           {
             "@type": "WebApplication",
-            "name": "Codenames",
+            "name": "Codenames.codes",
+            "alternateName": "Codenames online",
             "url": "https://codenames.codes/",
             "applicationCategory": "GameApplication",
             "operatingSystem": "Any",
@@ -105,23 +107,24 @@
     />
   </head>
   <body>
-    <div id="root"></div>
-    <noscript>
-      <main>
-        <h1>Codenames</h1>
+    <div id="root">
+      <main class="prerender">
+        <h1>Codenames.codes — play Codenames online</h1>
         <p>
-          Free online Codenames. Create a room, share the code, and play the classic
-          word game with spymasters and operatives in real time. JavaScript is required
-          to join a table.
+          Free online Codenames. Create a room, share the four-letter code, and play
+          the classic word game with friends as spymasters and operatives in real time.
+          No account and no download.
         </p>
         <h2>How to play</h2>
         <p>
-          One spymaster per team gives one-word clues. Operatives guess the matching
-          agents on the grid. Avoid bystanders and the assassin.
+          Two teams, red and blue, race to find all of their agents on a 5×5 grid of
+          words. Each team has one spymaster who gives a one-word clue and a number.
+          Operatives guess cards that match the clue. Bystanders end the turn, and
+          the assassin ends the game.
         </p>
-        <p><a href="/stats">Server statistics</a></p>
+        <p><a href="/stats">Live server statistics</a></p>
       </main>
-    </noscript>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

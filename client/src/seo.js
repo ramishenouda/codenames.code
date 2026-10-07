@@ -1,14 +1,14 @@
 import { SITE_URL } from './site.js';
 
 const HOME = {
-  title: 'Codenames — play online with friends',
+  title: 'Codenames.codes — Play Codenames online free with friends',
   description:
     'Free online Codenames. Create a room, share the code, and play the classic word game with spymasters and operatives in real time.',
   robots: 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
 };
 
 const STATS = {
-  title: 'Codenames · Stats',
+  title: 'Stats · Codenames.codes',
   description:
     'Live and lifetime statistics for this Codenames server: open rooms, players online, games finished, and who won.',
   robots: 'index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1',
